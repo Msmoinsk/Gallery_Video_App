@@ -1,0 +1,63 @@
+getImages = {
+    req : {
+        axios.get('/user', {
+            headers: {
+                Authorization: `Bearer ${token}`  
+            }
+        });
+    }
+
+    response : {
+        "msg": "Here are the post",
+        "posts": [
+            {
+                "_id": "43hdwKJlVIFqpZfGMfXR",
+                "imgUrl": "https://firebasestorage.googleapis.com/v0/b/gallery-aaf91.appspot.com/o/images%2F17267613585581672126283642.jpg?alt=media&token=f47876c9-e4e9-4fe9-9221-eef88e34da0d",
+                "userID": "WVPmCgciIoSk5cYrUKeE",
+                "caption": "This is test image Moin4 post1"
+            }
+        ],
+        "post_length": 1
+    }
+}
+
+PostImages = {
+    req : {
+        data : {
+            "caption": "This is test image Moin4 post1",
+            "imgUrl": "https://firebasestorage.googleapis.com/v0/b/gallery-aaf91.appspot.com/o/images%2F17267613585581672126283642.jpg?alt=media&token=f47876c9-e4e9-4fe9-9221-eef88e34da0d"
+        }
+        api_req : {
+            axios.post('/user', {
+                headers: {
+                    Authorization: `Bearer ${token}`  
+                }
+            });
+        }
+    }
+}
+
+signUp_send_data = {
+    req : {
+        "username" = "test_unique",
+        "email":"mskindustry@gmail.com",
+        "password": "moin"
+    }
+
+    response : {
+        "msg": "User is been Created successfully",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJ5Y2IxSzRJMWFNVFNpb2haT2NLZiIsInVzZXJuYW1lIjoibW9pbjMiLCJpYXQiOjE3MjY5OTEwNzUsImV4cCI6MTcyNzI1MDI3NX0.oxfgG6357V7rMX4kCdUS8opGGlyxPtQijzHOFo65Id8"
+    }
+}
+
+login_send_data = {
+    req : {
+        "username" = "test_unique",
+        "password": "moin"
+    }
+
+    response : {
+        "msg": "User is been Created successfully",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJ5Y2IxSzRJMWFNVFNpb2haT2NLZiIsInVzZXJuYW1lIjoibW9pbjMiLCJpYXQiOjE3MjY5OTEwNzUsImV4cCI6MTcyNzI1MDI3NX0.oxfgG6357V7rMX4kCdUS8opGGlyxPtQijzHOFo65Id8"
+    }    
+}
