@@ -8,9 +8,11 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Logout from '@mui/icons-material/Logout';
+import { NameContext } from '../LoginSignUp/LoginSignUp';
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const { setName } = React.useContext(NameContext)
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
@@ -19,6 +21,7 @@ export default function AccountMenu() {
   const handleClose = (event) => {
     setAnchorEl(null);
     if(event.target.id === 'logout'){
+        setName(null)
         localStorage.removeItem('token')
         localStorage.removeItem('username')
     }
