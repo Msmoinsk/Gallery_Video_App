@@ -6,6 +6,8 @@ import app from '../../Connection/firebase_connect';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
+import LoadingButton from '@mui/lab/LoadingButton'
+import SaveIcon from '@mui/icons-material/Save'
 
 function FormExample(props) {
     const [validated, setValidated] = useState(false);
@@ -90,7 +92,7 @@ function FormExample(props) {
 
     const handleSubmit = async (event) => {
         const form = event.currentTarget;
-        if (form.checkValidity() === false) {
+        if (form.checkValidity() === false || imgPercentage !== 100) {
             event.preventDefault();
             event.stopPropagation();
         }
@@ -133,7 +135,11 @@ function FormExample(props) {
                 Please choose an Image.
             </Form.Control.Feedback>
         </Form.Group><br />
-      <Button type="submit">Submit form</Button>
+        {
+            imgPercentage === 100 
+            ? <Button type="submit">Submit form</Button>
+            :<LoadingButton loading loadingPosition="start" startIcon={<SaveIcon />}variant="outlined">Save</LoadingButton> 
+        }
     </Form>
   );
 }

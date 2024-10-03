@@ -5,48 +5,21 @@ import { NameContext } from '../LoginSignUp/LoginSignUp'
 // import Button from 'react-bootstrap/Button';
 // import Card from 'react-bootstrap/Card';
 import '../../Styles/gallery.css';
-import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
-import Collapse from '@mui/material/Collapse';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+
 import DeleteIcon from '@mui/icons-material/Delete';
-
-
-const ExpandMore = styled((props) => {
-    const { expand, ...other } = props;
-    return <IconButton {...other} />;
-  })(({ theme }) => ({
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
-    variants: [
-      {
-        props: ({ expand }) => !expand,
-        style: {
-          transform: 'rotate(0deg)',
-        },
-      },
-      {
-        props: ({ expand }) => !!expand,
-        style: {
-          transform: 'rotate(180deg)',
-        },
-      },
-    ],
-  }));
-  
+import EditIcon from '@mui/icons-material/Edit';
+import ButtonGroup from '@mui/joy/ButtonGroup';
 
 
 const GetImages = () => {
@@ -73,11 +46,31 @@ const GetImages = () => {
         }
     }, [name])
 
-    const [expanded, setExpanded] = React.useState(false);
+    const deletePost = (id) => {
+      if (token) {
+        try {
+            const deleteImage = async() => {
+                const imagesData = await axios.delete(`http://localhost:8800/api/v1/user/img/image/${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+                alert(imagesData.data.msg)
+                
+                const newPostList = posts.filter((post) => post._id !== id )
+                setPosts(newPostList)
+            }
+            deleteImage()
 
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
-    };
+
+        } catch (error) {
+            console.log(error)
+            console.log(error.response.data.msg)
+        }
+      } else {
+        alert('You Cannot delete this post')
+      }
+    }
 
   return (
     <div className='image-container'>
@@ -87,46 +80,58 @@ const GetImages = () => {
                 posts.map( (post, index) => {
                          
                         return(
-                        <Card sx={{ maxWidth: 400 }} key={post._id}>
+                          <Card sx={{ maxWidth: 345 }} key={post._id}>
                             <CardHeader
-                                avatar={
-                                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe"></Avatar>
-                                }
-                                action={
-                                <IconButton aria-label="settings">
-                                    <MoreVertIcon />
-                                </IconButton>
-                                }
-                                title="Shrimp and Chorizo Paella"
-                                subheader="September 14, 2016"
+                              avatar={
+                                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                                  {localStorage.getItem('username') !== null ? localStorage.getItem('username').charAt(0) : "A"}
+                                </Avatar>
+                              }
+                              action={
+                                <ButtonGroup
+                                    buttonFlex={1}
+                                    aria-label="flex button group"
+                                    sx={{
+                                      p: 1,
+                                      width: 120,
+                                      maxWidth: '100%',
+                                      overflow: 'auto',
+                                      gap: 2,
+                                      display: 'flex'
+                                    }}
+                                  >
+
+                                    <IconButton aria-label="delete" color="primary">
+                                      <EditIcon />
+                                    </IconButton>
+
+                                    <IconButton aria-label="delete" color='error' onClick={() => deletePost(post._id)}>
+                                      <DeleteIcon />
+                                    </IconButton>
+
+                                </ButtonGroup>
+                              }
+                              title={localStorage.getItem('username') !== null ? localStorage.getItem('username') : "User"}
                             />
-                            <CardMedia
-                                component="img"
-                                height="200"
-                                image={post.imgUrl}
-                                alt="Paella dish"
-                            />
-                            <CardActions disableSpacing>
-                                <IconButton aria-label="add to favorites">
-                                    <FavoriteIcon />
-                                </IconButton>
-                                <IconButton aria-label="share">
-                                    <ShareIcon />
-                                </IconButton>
-                                <ExpandMore
-                                expand={expanded}
-                                onClick={handleExpandClick}
-                                aria-expanded={expanded}
-                                aria-label="show more"
-                                >
-                                <ExpandMoreIcon />
-                                </ExpandMore>
-                            </CardActions>
-                            <Collapse in={expanded} timeout="auto" unmountOnExit>
-                                <CardContent>
-                                <Typography sx={{ marginBottom: 2 }} >{post.caption}</Typography>
-                                </CardContent>
-                            </Collapse>
+                          <CardMedia
+                            component="img"
+                            height="194"
+                            image={post.imgUrl}
+                            alt="Paella dish"
+                          />
+                          <CardContent>
+                            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                              {post.caption}
+                            </Typography>
+                          </CardContent>
+                          <CardActions disableSpacing>
+                            <IconButton aria-label="add to favorites">
+                              <FavoriteIcon />
+                            </IconButton>
+                            <IconButton aria-label="share">
+                              <ShareIcon />
+                            </IconButton>
+                          </CardActions>
                         </Card>
                         )
                 })
@@ -137,33 +142,3 @@ const GetImages = () => {
 }
 
 export default GetImages
-
-                        // <Card sx={{ maxWidth: 400 }} key={index} >
-                        //     <CardActionArea>
-                        //         <CardHeader
-                        //             avatar={
-                        //             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                                        
-                        //             </Avatar>
-                        //             }
-                        //             action={
-                        //             <IconButton aria-label="settings">
-                        //                 <MoreVertIcon />
-                        //             </IconButton>
-                        //             }
-                        //             title="Shrimp and Chorizo Paella"
-                        //             subheader="September 14, 2016"
-                        //         />
-                        //         <CardMedia
-                        //         component="img"
-                        //         height="250"
-                        //         image={post.imgUrl}
-                        //         alt="green iguana"
-                        //         />
-                        //         <CardContent>
-                        //         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        //             {post.caption}
-                        //         </Typography>
-                        //         </CardContent>
-                        //     </CardActionArea>
-                        // </Card>
