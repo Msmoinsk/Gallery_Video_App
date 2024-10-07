@@ -16,6 +16,7 @@ import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
+import SaveAltIcon from '@mui/icons-material/SaveAlt';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -26,6 +27,7 @@ const GetImages = () => {
     const token = localStorage.getItem('token')
     const { name } = useContext(NameContext)
     const [posts, setPosts] = useState([])
+    const [toggleEdit, setToggleEdit] = useState({})
 
     useEffect(()=>{
         if (token) {
@@ -72,12 +74,70 @@ const GetImages = () => {
       }
     }
 
+    const editPost = (event) => {
+      const targetID = event.target.id
+      const tagName = event.target.tagName
+
+      let parentnode;
+      let captionEdit;
+
+      if(tagName === 'BUTTON'){
+        parentnode = event.target.parentNode.parentNode.parentNode.parentNode
+
+        captionEdit = parentnode.childNodes[2].childNodes[0]
+        captionEdit.setAttribute('contenteditable', 'true')
+      } else if (tagName === 'svg'){
+        parentnode = event.target.parentNode.parentNode.parentNode.parentNode.parentNode
+
+        captionEdit = parentnode.childNodes[2].childNodes[0]
+        captionEdit.setAttribute('contenteditable', 'true')
+      } else if (tagName === 'path'){
+        parentnode = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode
+      }
+
+      setToggleEdit( input => ({
+        ...input,
+        isEdit: true,
+        btnID: targetID
+      }))
+
+      // console.log(tagName);
+      // console.log(targetID);
+      // // console.log(parentnode);
+      // // console.log(SubmitButton.innerHTML);
+    }
+    const saveEdit = (event) => {
+      const targetID = event.target.id
+      const tagName = event.target.tagName
+
+      let parentnode;
+      let captionEditSave;;
+
+      if(tagName === 'BUTTON'){
+        parentnode = event.target.parentNode.parentNode.parentNode.parentNode
+      } else if (tagName === 'svg'){
+        parentnode = event.target.parentNode.parentNode.parentNode.parentNode.parentNode
+      } else if (tagName === 'path'){
+        parentnode = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode
+      }
+
+      captionEditSave = parentnode.childNodes[2].childNodes[0]
+      captionEditSave.setAttribute('contenteditable', 'false')
+      
+      // console.log()
+      setToggleEdit( input => ({
+        ...input,
+        isEdit: false,
+        btnID: targetID
+      }))
+    }
+
   return (
     <div className='image-container'>
         {
             posts.length !== 0
             ?
-                posts.map( (post, index) => {
+                posts.map( (post) => {
                          
                         return(
                           <Card sx={{ maxWidth: 345 }} key={post._id}>
@@ -101,8 +161,12 @@ const GetImages = () => {
                                     }}
                                   >
 
-                                    <IconButton aria-label="delete" color="primary">
-                                      <EditIcon />
+                                    <IconButton aria-label="delete" id={post._id} color="primary" onClick={toggleEdit.isEdit && toggleEdit.btnID === post._id ? event => saveEdit(event) : event => editPost(event)} >
+                                      {
+                                        toggleEdit.isEdit && toggleEdit.btnID === post._id
+                                        ? <SaveAltIcon id={post._id} />
+                                        : <EditIcon id={post._id} />
+                                      }
                                     </IconButton>
 
                                     <IconButton aria-label="delete" color='error' onClick={() => deletePost(post._id)}>
