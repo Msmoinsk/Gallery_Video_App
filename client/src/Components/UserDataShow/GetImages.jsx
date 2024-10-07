@@ -29,6 +29,7 @@ const GetImages = () => {
     const [posts, setPosts] = useState([])
     const [toggleEdit, setToggleEdit] = useState({})
 
+    // To Get the Images
     useEffect(()=>{
         if (token) {
             try {
@@ -48,6 +49,7 @@ const GetImages = () => {
         }
     }, [name])
 
+    // To delete the Images
     const deletePost = (id) => {
       if (token) {
         try {
@@ -74,6 +76,7 @@ const GetImages = () => {
       }
     }
 
+    // To Make the Edit Posible
     const editPost = (event) => {
       const targetID = event.target.id
       const tagName = event.target.tagName
@@ -100,12 +103,9 @@ const GetImages = () => {
         isEdit: true,
         btnID: targetID
       }))
-
-      // console.log(tagName);
-      // console.log(targetID);
-      // // console.log(parentnode);
-      // // console.log(SubmitButton.innerHTML);
     }
+
+    // To Save the Changes
     const saveEdit = (event) => {
       const targetID = event.target.id
       const tagName = event.target.tagName
@@ -122,9 +122,41 @@ const GetImages = () => {
       }
 
       captionEditSave = parentnode.childNodes[2].childNodes[0]
+      const caption = captionEditSave.innerHTML
       captionEditSave.setAttribute('contenteditable', 'false')
+
+      if (token && targetID) {
+        try {
+            const editCaption = async() => {
+                const imagesData = await axios.put(`http://localhost:8800/api/v1/user/img/image/${targetID}`, {
+                  caption: caption
+                },{
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+                
+                const savePosts = posts.map( post => 
+                  post._id === targetID 
+                  ? {
+                    ...post,
+                    caption: caption
+                  }
+                  : post
+                )
+                setPosts(savePosts)
+
+                console.log(imagesData.data)
+            }
+            editCaption()
+        } catch (error) {
+            console.log(error)
+            console.log(error.response.data.msg)
+        }
+      } else {
+        alert('Please click the edit button')
+      }
       
-      // console.log()
       setToggleEdit( input => ({
         ...input,
         isEdit: false,
