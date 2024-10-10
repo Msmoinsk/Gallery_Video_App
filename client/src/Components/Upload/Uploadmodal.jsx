@@ -5,7 +5,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Form from './Form'
 import { NameContext } from '../LoginSignUp/LoginSignUp';
 
-function UploadBtn() {
+function UploadBtn(props) {
   const [show, setShow] = useState(false);
   
   // const[tokenAccess, setTokenAccess] = useState()
@@ -27,7 +27,7 @@ function UploadBtn() {
           <Modal.Title>Upload Your Pictures</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form setShow={setShow} show={show} />
+          <Form setShow={setShow} show={show} urlsClicked={props.urlClicked} />
         </Modal.Body>
       </Modal>
     </>

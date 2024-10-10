@@ -1,4 +1,4 @@
-class Post {
+export class Post {
     constructor(_id, imgUrl, userID, caption){
         this._id = _id;
         this.imgUrl = imgUrl;
@@ -6,5 +6,11 @@ class Post {
         this.caption = caption;
     }
 }
-
-export default Post
+export class Vid {
+    constructor(_id, videoUrl, userID, caption){
+        this._id = _id;
+        this.videoUrl = videoUrl;
+        this.userID = userID
+        this.caption = caption;
+    }
+}

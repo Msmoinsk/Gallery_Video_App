@@ -98,6 +98,8 @@ function FormExample(props) {
         }
         setValidated(true);
         event.preventDefault()
+        
+        if(props.urlsClicked === 'gallery'){
             try {
                 const response = await axios.post('http://localhost:8800/api/v1/user/img/upload', {
                     ...inputs,
@@ -111,7 +113,23 @@ function FormExample(props) {
             } catch (error) {
                 alert(error.response.data.msg)
             }
-            props.setShow(false)
+        } else if (props.urlsClicked === 'video'){
+            try {
+                const response = await axios.post('http://localhost:8800/api/v1/user/vid/upload', {
+                    ...inputs,
+                    caption: caption
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${token}`  
+                    }
+                })
+                alert(response.data.msg);
+            } catch (error) {
+                alert(error.response.data.msg)
+            }
+            // console.log("video")
+        }
+        props.setShow(false)
     };
 
   return (
@@ -120,23 +138,42 @@ function FormExample(props) {
             <Form.Label>Caption</Form.Label> 
             <Form.Control type="text" onChange={(e)=>{ setCaption((prev) => e.target.value) }} placeholder="Caption" required />
             <Form.Control.Feedback type="invalid">
-            Please provide a Caption For Your Image.
+            Please provide a Caption For Your File.
             </Form.Control.Feedback>
         </Form.Group>
-        <Form.Group className="position-relative mb-3">
-            <Form.Label>File</Form.Label> { imgPercentage > 0 && "Uploading: "+ imgPercentage + " %" }
-            <Form.Control
-                type="file"
-                required
-                name="file"
-                onChange={(e)=>{ setImage((prev) => e.target.files[0]) }}
-            />
-            <Form.Control.Feedback type="invalid" tooltip>
-                Please choose an Image.
-            </Form.Control.Feedback>
-        </Form.Group><br />
         {
-            imgPercentage === 100 
+            props.urlsClicked === 'gallery'
+            ?   <>
+                <Form.Group className="position-relative mb-3">
+                    <Form.Label>File</Form.Label> { imgPercentage > 0 && "Uploading: "+ imgPercentage + " %" }
+                    <Form.Control
+                        type="file"
+                        required
+                        name="file"
+                        onChange={(e)=>{ setImage((prev) => e.target.files[0]) }}
+                    />
+                    <Form.Control.Feedback type="invalid" tooltip>
+                        Please choose an Image.
+                    </Form.Control.Feedback>
+                </Form.Group><br />
+                </>
+            :   <>
+                <Form.Group className="position-relative mb-3">
+                    <Form.Label>Video</Form.Label> { videoPercentage > 0 && "Uploading: "+ videoPercentage + " %" }
+                    <Form.Control
+                        type="file"
+                        required
+                        name="file"
+                        onChange={(e)=>{ setVideo((prev) => e.target.files[0]) }}
+                    />
+                    <Form.Control.Feedback type="invalid" tooltip>
+                        Please choose an Video.
+                    </Form.Control.Feedback>
+                </Form.Group><br />
+                </>
+        }
+        {
+            inputs.imgUrl !== undefined || inputs.videoUrl !== undefined
             ? <Button type="submit">Submit form</Button>
             :<LoadingButton loading loadingPosition="start" startIcon={<SaveIcon />}variant="outlined">Save</LoadingButton> 
         }

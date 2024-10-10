@@ -8,7 +8,7 @@ import '../Styles/gallery.css'
 const Gallery = () => {
   return (
     <div className='gallery'>
-      <UploadBtn />
+      <UploadBtn urlClicked='gallery' />
       <GetImages />
     </div>
   )

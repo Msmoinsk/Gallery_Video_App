@@ -2,14 +2,10 @@ import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import { NameContext } from '../LoginSignUp/LoginSignUp'
 
-import '../../Styles/gallery.css';
-import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
+import { Card, CardContent, CardMedia, Grid, Typography } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 
@@ -21,32 +17,27 @@ import ButtonGroup from '@mui/joy/ButtonGroup';
 const GetImages = () => {
     const token = localStorage.getItem('token')
     const { name } = useContext(NameContext)
-    const [posts, setPosts] = useState([])
+    const [videos, setVideos] = useState([])
     const [toggleEdit, setToggleEdit] = useState({})
 
     // To Get the Images
     useEffect(()=>{
         if (token) {
-            const requestImages = async() => {
-                const imagesData = await axios.get('http://localhost:8800/api/v1/user/img/images', {
+            const requestVideo = async() => {
+                const videosData = await axios.get('http://localhost:8800/api/v1/user/vid/videos', {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
                 }).catch(
                   function(error){
                     if (error.response) {
-                      // The request was made and the server responded with a status code
-                      // that falls out of the range of 2xx
                       console.log(error.response.data.msg);
-                      // console.log(error.response.status);
-                      // console.log(error.response.headers);
                     }
-                    // console.log(error)
                   }
                 )
-                if(imagesData !== undefined) setPosts(imagesData.data.posts)
+                if(videosData !== undefined) setVideos(videosData.data.video)
             }
-            requestImages()
+            requestVideo()
         }
     }, [name])
 
@@ -55,10 +46,10 @@ const GetImages = () => {
       if (token) {
         try {
             const deleteImage = async() => {
-              const newPostList = posts.filter((post) => post._id !== id )
-              setPosts(newPostList)
+              const newPostList = videos.filter((post) => post._id !== id )
+              setVideos(newPostList)
               
-              const imagesData = await axios.delete(`http://localhost:8800/api/v1/user/img/image/${id}`, {
+              const imagesData = await axios.delete(`http://localhost:8800/api/v1/user/vid/video/${id}`, {
                   headers: {
                       Authorization: `Bearer ${token}`
                   }
@@ -132,7 +123,7 @@ const GetImages = () => {
       if (token && targetID) {
         try {
             const editCaption = async() => {
-                const imagesData = await axios.put(`http://localhost:8800/api/v1/user/img/image/${targetID}`, {
+                const imagesData = await axios.put(`http://localhost:8800/api/v1/user/vid/video/${targetID}`, {
                   caption: caption
                 },{
                     headers: {
@@ -140,7 +131,7 @@ const GetImages = () => {
                     }
                 })
                 
-                const savePosts = posts.map( post => 
+                const savePosts = videos.map( post => 
                   post._id === targetID 
                   ? {
                     ...post,
@@ -148,7 +139,7 @@ const GetImages = () => {
                   }
                   : post
                 )
-                setPosts(savePosts)
+                setVideos(savePosts)
 
                 console.log(imagesData.data)
             }
@@ -168,69 +159,65 @@ const GetImages = () => {
       }))
     }
 
-  return (
-    <div className='image-container'>
-        {
-            posts.length !== 0
-            ?
-                posts.map( (post) => {
-                         
-                        return(
-                          <Card sx={{ maxWidth: 345 }} key={post._id}>
-                            <CardHeader
-                              avatar={
-                                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                                  {localStorage.getItem('username') !== null ? localStorage.getItem('username').charAt(0) : "A"}
-                                </Avatar>
+    return (
+      <div style={{ padding: '16px' }}>
+        <Grid container spacing={4}>
+          {
+            videos.length !== 0
+            ? 
+              videos.map( (post, index) => (
+                <Grid item md={4} sm={6} xs={12} key={index}>
+                  <Card>
+                    <CardHeader
+                      avatar={
+                        <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                          {localStorage.getItem('username') !== null ? localStorage.getItem('username').charAt(0) : "A"}
+                        </Avatar>
+                      }
+                      action={
+                        <ButtonGroup
+                            buttonFlex={1}
+                            aria-label="flex button group"
+                            sx={{
+                              p: 1,
+                              width: 120,
+                              maxWidth: '100%',
+                              overflow: 'auto',
+                              gap: 2,
+                              display: 'flex'
+                            }}
+                          >
+  
+                            <IconButton aria-label="delete" id={post._id} color="primary" onClick={toggleEdit.isEdit && toggleEdit.btnID === post._id ? event => saveEdit(event) : event => editPost(event)} >
+                              {
+                                toggleEdit.isEdit && toggleEdit.btnID === post._id
+                                ? <SaveAltIcon id={post._id} />
+                                : <EditIcon id={post._id} />
                               }
-                              action={
-                                <ButtonGroup
-                                    buttonFlex={1}
-                                    aria-label="flex button group"
-                                    sx={{
-                                      p: 1,
-                                      width: 120,
-                                      maxWidth: '100%',
-                                      overflow: 'auto',
-                                      gap: 2,
-                                      display: 'flex'
-                                    }}
-                                  >
-
-                                    <IconButton aria-label="delete" id={post._id} color="primary" onClick={toggleEdit.isEdit && toggleEdit.btnID === post._id ? event => saveEdit(event) : event => editPost(event)} >
-                                      {
-                                        toggleEdit.isEdit && toggleEdit.btnID === post._id
-                                        ? <SaveAltIcon id={post._id} />
-                                        : <EditIcon id={post._id} />
-                                      }
-                                    </IconButton>
-
-                                    <IconButton aria-label="delete" color='error' onClick={() => deletePost(post._id)}>
-                                      <DeleteIcon />
-                                    </IconButton>
-
-                                </ButtonGroup>
-                              }
-                              title={localStorage.getItem('username') !== null ? localStorage.getItem('username') : "User"}
-                            />
-                          <CardMedia
-                            component="img"
-                            height="194"
-                            image={post.imgUrl}
-                            alt="Paella dish"
-                          />
-                          <CardContent>
-                            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                              {post.caption}
-                            </Typography>
-                          </CardContent>
-                        </Card>
-                        )
-                })
-            : <h3>No Post Available </h3>
-        }
-    </div>
-  )
+                            </IconButton>
+  
+                            <IconButton aria-label="delete" color='error' onClick={() => deletePost(post._id)}>
+                              <DeleteIcon />
+                            </IconButton>
+  
+                        </ButtonGroup>
+                      }
+                      title={localStorage.getItem('username') !== null ? localStorage.getItem('username') : "User"}
+                    />
+                    <CardMedia component="video" src={post.videoUrl} controls />
+                    <CardContent>
+                      <Typography variant="body2" color="text.secondary">
+                        {post.caption}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))
+            : <h1 style={{ padding: '16px' }}>No Videos Avalaible</h1>
+          }
+        </Grid>
+      </div>
+    );
 }
 
 export default GetImages

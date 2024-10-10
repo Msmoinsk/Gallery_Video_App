@@ -7,6 +7,7 @@ import helmet from 'helmet'
 import cors from 'cors'
 import auth_router from "./routes/auth_route.js"
 import post_router from "./routes/post_route.js"
+import video_router from "./routes/video_route.js"
 import authentication from "./middleware/authentication.js"
 import { not_found } from "./middleware/notFound.js"
 import error_handler from './middleware/errorHandler.js'
@@ -24,6 +25,7 @@ app.use(xss())
 // Routes
 app.use('/api/v1/user', auth_router)
 app.use('/api/v1/user/img' ,authentication, post_router)
+app.use('/api/v1/user/vid' ,authentication, video_router)
 
 // Error Handlers
 app.use(not_found)
