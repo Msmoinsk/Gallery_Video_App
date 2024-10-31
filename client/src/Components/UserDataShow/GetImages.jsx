@@ -28,7 +28,7 @@ const GetImages = () => {
     useEffect(()=>{
         if (token) {
             const requestImages = async() => {
-                const imagesData = await axios.get('http://localhost:8800/api/v1/user/img/images', {
+                const imagesData = await axios.get('https://gallery-video-app.onrender.com/api/v1/user/img/images', {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -53,7 +53,7 @@ const GetImages = () => {
               const newPostList = posts.filter((post) => post._id !== id )
               setPosts(newPostList)
               
-              const imagesData = await axios.delete(`http://localhost:8800/api/v1/user/img/image/${id}`, {
+              const imagesData = await axios.delete(`https://gallery-video-app.onrender.com/api/v1/user/img/image/${id}`, {
                   headers: {
                       Authorization: `Bearer ${token}`
                   }
@@ -127,7 +127,7 @@ const GetImages = () => {
       if (token && targetID) {
         try {
             const editCaption = async() => {
-                const imagesData = await axios.put(`http://localhost:8800/api/v1/user/img/image/${targetID}`, {
+                const imagesData = await axios.put(`https://gallery-video-app.onrender.com/api/v1/user/img/image/${targetID}`, {
                   caption: caption
                 },{
                     headers: {

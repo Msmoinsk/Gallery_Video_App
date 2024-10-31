@@ -101,7 +101,7 @@ function FormExample(props) {
         
         if(props.urlsClicked === 'gallery'){
             try {
-                const response = await axios.post('http://localhost:8800/api/v1/user/img/upload', {
+                const response = await axios.post('https://gallery-video-app.onrender.com/api/v1/user/img/upload', {
                     ...inputs,
                     caption: caption
                 }, {
@@ -115,7 +115,7 @@ function FormExample(props) {
             }
         } else if (props.urlsClicked === 'video'){
             try {
-                const response = await axios.post('http://localhost:8800/api/v1/user/vid/upload', {
+                const response = await axios.post('https://gallery-video-app.onrender.com/api/v1/user/vid/upload', {
                     ...inputs,
                     caption: caption
                 }, {
@@ -269,7 +269,7 @@ export default FormExample;
 //     const handleSubmit = async (e) => {
 //         e.preventDefault()
 //         try {
-//             const response = await axios.post('http://localhost:8800/api/v1/user/img/upload', {
+//             const response = await axios.post('https://gallery-video-app.onrender.com/api/v1/user/img/upload', {
 //                 ...inputs,
 //                 caption: caption
 //             }, {

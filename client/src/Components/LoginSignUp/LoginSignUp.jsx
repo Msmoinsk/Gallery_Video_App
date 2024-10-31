@@ -44,7 +44,7 @@ const LoginSignUp = () => {
     async function onClickSignUp(){
         if(action==='Sign Up' && inputs.username, inputs.email, inputs.password !== ""){
             try {
-                const { data } = await axios.post('http://localhost:8800/api/v1/user/signup', {
+                const { data } = await axios.post('https://gallery-video-app.onrender.com/api/v1/user/signup', {
                     ...inputs
                 })
                 localStorage.setItem('token', data.token)
@@ -62,7 +62,7 @@ const LoginSignUp = () => {
     async function onClickLogin(){
         if(action==='Login' && inputs.username, inputs.password !== ""){
             try {
-                const { data } = await axios.post('http://localhost:8800/api/v1/user/login', {
+                const { data } = await axios.post('https://gallery-video-app.onrender.com/api/v1/user/login', {
                     ...inputs
                 })
                 localStorage.setItem('token', data.token)
