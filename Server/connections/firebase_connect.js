@@ -5,13 +5,12 @@ import { getFirestore, doc, collection, setDoc } from 'firebase/firestore';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAx-JAgJJkRrYsi4WSR6TtopofthiPH5Cg",
-  authDomain: "gallery-aaf91.firebaseapp.com",
-  projectId: "gallery-aaf91",
-  storageBucket: "gallery-aaf91.appspot.com",
-  messagingSenderId: "999110837343",
-  appId: "1:999110837343:web:9033c6356faf8d6c1647ea",
-  measurementId: "G-K2198G08R2"
+  apiKey: "AIzaSyBR0HfkBn43mC1_PYhcBz-QDmcqGrCLv5o",
+  authDomain: "msk-gallery.firebaseapp.com",
+  projectId: "msk-gallery",
+  storageBucket: "msk-gallery.appspot.com",
+  messagingSenderId: "764964006386",
+  appId: "1:764964006386:web:c7a3ccf1b421abedbb636b"
 };
 
 // Initialize Firebase

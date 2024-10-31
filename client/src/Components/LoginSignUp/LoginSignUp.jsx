@@ -14,6 +14,7 @@ export const NameProvider = ({children}) => {
 const LoginSignUp = () => {
 
     const [action, setAction] = useState('Login')
+    console.log(action)
     const [inputs, setInputs] = useState({
         username: "",
         email: "",
@@ -41,7 +42,7 @@ const LoginSignUp = () => {
     }
 
     async function onClickSignUp(){
-        if(action==='Sign Up' && inputs.username, inputs.email,inputs.password !== ""){
+        if(action==='Sign Up' && inputs.username, inputs.email, inputs.password !== ""){
             try {
                 const { data } = await axios.post('http://localhost:8800/api/v1/user/signup', {
                     ...inputs
@@ -101,7 +102,7 @@ const LoginSignUp = () => {
       </div>
       {
       action==='Login'?  
-        <div className="forgotpassword">Give Your Credentials<span>Or Create New User</span></div>
+        <div className="forgotpassword">Give Your Credentials<span> Or Create New User</span></div>
       : <div></div> 
       }
       <div className="submit-container">

@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes'
 import { Vid } from '../models/post_modal.js';
 import app from '../connections/firebase_connect.js'
 import { getFirestore, collection, getDocs, setDoc, doc, query, where, updateDoc, getDoc, deleteDoc } from 'firebase/firestore/lite';
-import next from 'next';
+// import next from 'next';
 const db = getFirestore(app);
 
 export const uploadVideo = async (req, res) => {
